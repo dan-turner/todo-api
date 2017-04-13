@@ -43,13 +43,14 @@ const get = async (id) => {
 }
 
 const list = async () => {
+  console.log('models/todos: list()')
   const params = {
     TableName: TableName,
   };
 
   // fetch all todos from the database
   const result = await dynamodb.scan(params).promise();
-  return result;
+  return result.Items;
 };
 
 const remove = async (id) => {
@@ -64,7 +65,7 @@ const remove = async (id) => {
   await dynamodb.delete(params).promise();
 };
 
-const update = async (id, data) => {
+const update = async (data) => {
   const timestamp = new Date().getTime();
 
   // validation
@@ -77,7 +78,7 @@ const update = async (id, data) => {
   const params = {
     TableName: TableName,
     Key: {
-      id: id,
+      id: data.id,
     },
     ExpressionAttributeNames: {
       '#todo_text': 'text',

@@ -54,6 +54,15 @@ functions:
       - http:
           method: PUT
           path: /{id}
+  graphql:
+    handler: handler.graphql
+    events:
+      - http:
+          method: GET
+          path: /graphql
+      - http:
+          method: POST
+          path: /graphql
 
 resources:
   Resources:

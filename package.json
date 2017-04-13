@@ -21,6 +21,9 @@
   "dependencies": {
     "aws-sdk": "^2.41.0",
     "babel-runtime": "^6.23.0",
+    "graphql": "^0.9.3",
+    "graphql-server-lambda": "^0.7.1",
+    "graphql-tools": "^0.11.0",
     "uuid": "^3.0.1"
   }
 }
