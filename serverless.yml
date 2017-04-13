@@ -1,0 +1,75 @@
+service: todo-api
+frameworkVersion: ">=1.1.0 <2.0.0"
+
+plugins:
+  - serverless-webpack
+custom:
+  webpackIncludeModules: true # enable auto including modules
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  region: ap-southeast-2
+  environment:
+    DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
+
+functions:
+  create:
+    handler: handler.create
+    events:
+      - http:
+          method: POST
+          path: /
+  get:
+    handler: handler.get
+    events:
+      - http:
+          method: GET
+          path: /{id}
+  list:
+    handler: handler.list
+    events:
+      - http:
+          method: GET
+          path: /
+  remove:
+    handler: handler.remove
+    events:
+      - http:
+          method: DELETE
+          path: /{id}
+  update:
+    handler: handler.update
+    events:
+      - http:
+          method: PUT
+          path: /{id}
+
+resources:
+  Resources:
+    DynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.DYNAMODB_TABLE}
