@@ -63,6 +63,12 @@ functions:
       - http:
           method: POST
           path: /graphql
+  graphiql:
+    handler: handler.graphiql
+    events:
+      - http:
+          method: GET
+          path: /graphiql
 
 resources:
   Resources:
