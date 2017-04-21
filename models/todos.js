@@ -88,6 +88,7 @@ const update = async (data) => {
       ':checked': data.checked,
       ':updatedAt': timestamp,
     },
+    ConditionExpression: 'attribute_exists(id)',
     UpdateExpression: 'SET #todo_text = :text, checked = :checked, updatedAt = :updatedAt',
     ReturnValues: 'ALL_NEW',
   };
